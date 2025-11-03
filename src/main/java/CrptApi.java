@@ -41,7 +41,7 @@ public class CrptApi {
         Stream.generate(() -> new Thread(
                         () -> {
                             try {
-                                String response = crptApi.introduceGoods(document, "signature");
+                                String response = crptApi.sendDocument(document, "signature");
                                 System.out.println(response);
 
                             } catch (IOException | InterruptedException e) {
@@ -53,7 +53,7 @@ public class CrptApi {
                 .forEach(Thread::start);
     }
 
-    public synchronized String introduceGoods(final Document document, final String signature) throws IOException, InterruptedException {
+    public synchronized String sendDocument(final Document document, final String signature) throws IOException, InterruptedException {
         long startRequestTime = System.currentTimeMillis();
 
         JSONObject documentJson = new JSONObject();
@@ -164,17 +164,20 @@ public class CrptApi {
         };
     }
 
-    public record Document(Description description, String docId, String docStatus, String docType,
-                           String importRequest, String ownerInn, String participantInn, String producerInn,
-                           String productionDate, String productionType, List<Product> products, String regDate,
-                           String regNumber) {
+    public record Document(
+            Description description, String docId, String docStatus, String docType,
+            String importRequest, String ownerInn, String participantInn, String producerInn,
+            String productionDate, String productionType, List<Product> products, String regDate,
+            String regNumber
+    ) {
 
         public record Description(String participantInn) {}
 
-        public record Product(CertificateType certificateDocument, String certificateDocumentDate,
-                              String certificateDocumentNumber, String ownerInn, String producerInn,
-                              String productionDate, String tnvedCode, String uitCode, String uituCode) {
-
+        public record Product(
+                CertificateType certificateDocument, String certificateDocumentDate,
+                String certificateDocumentNumber, String ownerInn, String producerInn,
+                String productionDate, String tnvedCode, String uitCode, String uituCode
+        ) {
             public enum CertificateType {
                 CONFORMITY_CERTIFICATE, CONFORMITY_DECLARATION
             }
