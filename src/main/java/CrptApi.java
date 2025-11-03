@@ -13,7 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
-public record CrptApi(TimeUnit time, int requestLimit) {
+@SuppressWarnings("ClassCanBeRecord")
+public class CrptApi {
+
+    private final TimeUnit time;
+    private final int requestLimit;
 
     private static final String AUTHENTICATION_URL = "https://ismp.crpt.ru/api/v3/auth/cert/key";
     private static final String TOKEN_URL = "https://ismp.crpt.ru/api/v3/auth/cert/";
@@ -155,7 +159,7 @@ public record CrptApi(TimeUnit time, int requestLimit) {
 
     private long getTime() {
         return switch (this.time) {
-            case SECONDS, MINUTES, HOURS, DAYS -> time().toChronoUnit().getDuration().toMillis();
+            case SECONDS, MINUTES, HOURS, DAYS -> this.time.toChronoUnit().getDuration().toMillis();
             default -> throw new IllegalArgumentException("Неверная единица измерения времени");
         };
     }
