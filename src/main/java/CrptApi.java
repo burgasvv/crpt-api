@@ -23,8 +23,8 @@ public class CrptApi {
     private static final String TOKEN_URL = "https://ismp.crpt.ru/api/v3/auth/cert/";
     private static final String CREATE_DOCUMENT_URL = "https://ismp.crpt.ru/api/v3/lk/documents/create";
 
-    private static AtomicInteger requestAmount;
-    private static AtomicLong timeForRequests = new AtomicLong(0);
+    private static final AtomicInteger requestAmount = new AtomicInteger();
+    private static final AtomicLong timeForRequests = new AtomicLong(0);
 
     public CrptApi(TimeUnit time, int requestLimit) {
         if (requestLimit <= 0) {
@@ -32,7 +32,7 @@ public class CrptApi {
         }
         this.time = time;
         this.requestLimit = requestLimit;
-        requestAmount = new AtomicInteger(this.requestLimit);
+        requestAmount.set(this.requestLimit);
     }
 
     public static void main(String[] args) {
@@ -136,8 +136,8 @@ public class CrptApi {
         ) {
             System.out.println("Блокировка");
             Thread.sleep(this.getTime());
-            requestAmount = new AtomicInteger(this.requestLimit);
-            timeForRequests = new AtomicLong(0);
+            requestAmount.set(this.requestLimit);
+            timeForRequests.set(0);
         }
         return createDocumentResponse;
     }
