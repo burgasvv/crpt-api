@@ -127,11 +127,11 @@ public record CrptApi(TimeUnit time, int requestLimit) {
         }
 
         if (
-                (requestAmount.get() < 1 || getTime() <= commonRequestsTime) ||
-                (requestAmount.get() < 1 && getTime() <= commonRequestsTime)
+                (requestAmount.get() < 1 || commonRequestsTime > this.getTime()) ||
+                (requestAmount.get() < 1 && commonRequestsTime > this.getTime())
         ) {
             System.out.println("Блокировка");
-            Thread.sleep(getTime());
+            Thread.sleep(this.getTime());
             requestAmount = new AtomicInteger(this.requestLimit);
             timeForRequest = new AtomicLong(0);
         }
