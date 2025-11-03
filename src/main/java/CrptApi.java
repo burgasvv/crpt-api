@@ -121,8 +121,8 @@ public record CrptApi(TimeUnit time, int requestLimit) {
         requestAmount.decrementAndGet();
 
         long endRequestTime = System.currentTimeMillis();
-        long sumRequestTime = endRequestTime - startRequestTime;
-        long commonRequestsTime = timeForRequest.addAndGet(sumRequestTime);
+        long resultRequestTime = endRequestTime - startRequestTime;
+        long commonRequestsTime = timeForRequest.addAndGet(resultRequestTime);
 
         if (commonRequestsTime > getTime()) {
             System.out.println("Превышение времени выполнения запросов: " + commonRequestsTime);
