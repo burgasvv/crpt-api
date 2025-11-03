@@ -8,7 +8,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -33,23 +32,19 @@ public record CrptApi(TimeUnit time, int requestLimit) {
     }
 
     public static void main(String[] args) {
-        CrptApi crptApi = new CrptApi(TimeUnit.SECONDS, 3);
+        CrptApi crptApi = new CrptApi(TimeUnit.SECONDS, 4);
         Document document = getDocument();
-        Stream.generate(
-                () -> new Thread(
+        Stream.generate(() -> new Thread(
                         () -> {
                             try {
-                                String response = crptApi.introduceGoods(
-                                        document, UUID.randomUUID().toString().replaceAll("-", "")
-                                );
+                                String response = crptApi.introduceGoods(document, "signature");
                                 System.out.println(response);
 
                             } catch (IOException | InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
                         }
-                )
-        )
+                ))
                 .limit(15)
                 .forEach(Thread::start);
     }
