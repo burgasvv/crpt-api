@@ -39,7 +39,7 @@ public record CrptApi(TimeUnit time, int requestLimit) {
                 () -> new Thread(
                         () -> {
                             try {
-                                String response = crptApi.createDocument(
+                                String response = crptApi.introduceGoods(
                                         document, UUID.randomUUID().toString().replaceAll("-", "")
                                 );
                                 System.out.println(response);
@@ -54,7 +54,7 @@ public record CrptApi(TimeUnit time, int requestLimit) {
                 .forEach(Thread::start);
     }
 
-    public synchronized String createDocument(final Document document, final String signature) throws IOException, InterruptedException {
+    public synchronized String introduceGoods(final Document document, final String signature) throws IOException, InterruptedException {
         long startRequestTime = System.currentTimeMillis();
 
         JSONObject documentJson = new JSONObject();
@@ -147,12 +147,14 @@ public record CrptApi(TimeUnit time, int requestLimit) {
         Document.Description description = new Document.Description("description");
         Document.Product firstProduct = new Document.Product(
                 Document.Product.CertificateType.CONFORMITY_CERTIFICATE,
-                "2025-10-15", "123", "123", "123", "2025-10-15",
-                "qwe", "asd", "zxc"
+                "2025-10-15", "docNumber", "ownerInn",
+                "producerInn", "2025-10-15",
+                "tnvedCode", "uitCode", "uituCode"
         );
         return new Document(
-                description, "123", "true", "tyu", "true", "123", "345", "678",
-                "2025-10-15", "type", List.of(firstProduct), "2025-10-15", "123"
+                description, "docId", "docStatus", "docType",
+                "true", "ownerInn", "participantInn", "producerInn",
+                "2025-10-15", "productionType", List.of(firstProduct), "2025-10-15", "regNumber"
         );
     }
 
