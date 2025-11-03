@@ -124,12 +124,18 @@ public record CrptApi(TimeUnit time, int requestLimit) {
         long sumRequestTime = endRequestTime - startRequestTime;
         long commonRequestsTime = timeForRequest.addAndGet(sumRequestTime);
 
-        System.out.println("Общее время выполненных запросов: " + commonRequestsTime);
+        if (commonRequestsTime > getTime()) {
+            System.out.println("Превышение времени выполнения запросов: " + commonRequestsTime);
+
+        } else {
+            System.out.println("Общее время выполненных запросов: " + commonRequestsTime);
+        }
 
         if (
                 (requestAmount.get() < 1 || getTime() <= commonRequestsTime) ||
                 (requestAmount.get() < 1 && getTime() <= commonRequestsTime)
         ) {
+            System.out.println("Блокировка");
             Thread.sleep(getTime());
             requestAmount = new AtomicInteger(this.requestLimit);
             timeForRequest = new AtomicLong(0);
