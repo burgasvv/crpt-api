@@ -124,10 +124,10 @@ public class CrptApi {
         long commonRequestsTime = timeForRequests.addAndGet(resultRequestTime);
 
         if (commonRequestsTime > this.getTime()) {
-            System.out.println("Превышение времени выполнения запросов: " + commonRequestsTime);
+            System.out.println("Превышение времени выполнения запросов: " + commonRequestsTime + " мс");
 
         } else {
-            System.out.println("Общее время выполненных запросов: " + commonRequestsTime);
+            System.out.println("Общее время выполненных запросов: " + commonRequestsTime+ " мс");
         }
 
         if (
