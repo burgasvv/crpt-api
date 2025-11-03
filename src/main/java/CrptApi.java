@@ -24,7 +24,7 @@ public class CrptApi {
     private static final String CREATE_DOCUMENT_URL = "https://ismp.crpt.ru/api/v3/lk/documents/create";
 
     private static AtomicInteger requestAmount;
-    private static AtomicLong timeForRequest = new AtomicLong(0);
+    private static AtomicLong timeForRequests = new AtomicLong(0);
 
     public CrptApi(TimeUnit time, int requestLimit) {
         if (requestLimit <= 0) {
@@ -121,7 +121,7 @@ public class CrptApi {
 
         long endRequestTime = System.currentTimeMillis();
         long resultRequestTime = endRequestTime - startRequestTime;
-        long commonRequestsTime = timeForRequest.addAndGet(resultRequestTime);
+        long commonRequestsTime = timeForRequests.addAndGet(resultRequestTime);
 
         if (commonRequestsTime > this.getTime()) {
             System.out.println("Превышение времени выполнения запросов: " + commonRequestsTime);
@@ -137,7 +137,7 @@ public class CrptApi {
             System.out.println("Блокировка");
             Thread.sleep(this.getTime());
             requestAmount = new AtomicInteger(this.requestLimit);
-            timeForRequest = new AtomicLong(0);
+            timeForRequests = new AtomicLong(0);
         }
         return createDocumentResponse;
     }
